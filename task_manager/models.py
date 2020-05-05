@@ -15,7 +15,7 @@ class Team(models.Model):
     # Тут я не знаю что писать, так что пока будет так.
     name = models.CharField(max_length=50, default='Team')
     managers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='managers', null=True)
-    workers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='workers', null=True)
+    workers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
 
 
@@ -51,6 +51,6 @@ class Task(models.Model):
     executor = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='Executor', null=True,
                                     blank=True)
     role = models.CharField(max_length=4, choices=CustomUser.POSITION_CHOICES)
-    status = models.CharField(max_length=4, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=4, choices=STATUS_CHOICES, default=OPEN)
     process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True)
     deadline = models.DateTimeField(default=datetime.datetime.now())

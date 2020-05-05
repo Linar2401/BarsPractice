@@ -79,8 +79,11 @@ def create_room(request):
 def profile(request):
     user = request.user
     if user.is_manager():
-        room = Room.objects.get(author=user)
-        staff = room.users.all()
+        room = Room.objects.filter(author=user)
+        if len(room) > 0:
+            staff = room.users.all()
+        else:
+            staff = 'Empty'
         form = AddStaffToRoom()
         return render(request, 'account/manager_profile.html',
                       {'user': user,
@@ -89,7 +92,7 @@ def profile(request):
                        'form': form})
     else:
         user = request.user
-        new_room = user.room
+        new_room = room = Room.objects.filter(author=user)
         staff = new_room.users.all()
         return render(request, 'account/room.html',
                       {'user': user,

@@ -21,6 +21,7 @@ class CustomUser(AbstractUser):
                                 unique=True)
     position = models.CharField(max_length=4,
                                 choices=POSITION_CHOICES, )
+
     room = models.ForeignKey('Room',
                              on_delete=models.SET_NULL,
                              related_name='users',

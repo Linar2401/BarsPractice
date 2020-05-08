@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls', namespace='account')),
     path('task_manager/', include('task_manager.urls', namespace='task_manager')),
+    path('bp_manager/', include('bp_manager.urls', namespace='bp_manager')),
 
 ]

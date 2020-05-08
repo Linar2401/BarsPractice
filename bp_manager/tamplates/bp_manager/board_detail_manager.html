@@ -9,8 +9,8 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <a href="{% url 'task_manager:create_process'%}?id={{ task.id }}" class="btn btn-primary">Создать Бизнесс процесс</a>
-                <a href="{% url 'task_manager:create_team'%}?id={{ task.id }}" class="btn btn-primary">Создать команду</a>
+                <a href="{% url 'bp_manager:create_process'%}?id={{ task.id }}" class="btn btn-primary">Создать Бизнесс процесс</a>
+                <a href="{% url 'bp_manager:create_team'%}?id={{ task.id }}" class="btn btn-primary">Создать команду</a>
                 <a href="{% url 'task_manager:create_task'%}?id={{ task.id }}" class="btn btn-primary">Создать задачу</a>
             </div>
         </div>
@@ -30,8 +30,8 @@
                             <p class="card-text">Workers: {% for worker in team.workers_set %}
                                 {{ worker.username }} + |
                             {% endfor %}</p>
-                                <a href="{% url 'task_manager:update_team' pk=team.id%}" class="btn btn-primary">Изменить</a>
-                                <a href="{% url 'task_manager:delete_team' pk=team.id%}" class="btn btn-primary">Удалить</a>
+                                <a href="{% url 'bp_manager:update_team' pk=team.id%}" class="btn btn-primary">Изменить</a>
+                                <a href="{% url 'bp_manager:delete_team' pk=team.id%}" class="btn btn-primary">Удалить</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -66,8 +66,8 @@
                                 </div>
                             {% endfor %}
                             <hr>
-                            <a href="{% url 'task_manager:update_process' pk=process.id%}" class="btn btn-primary">Изменить</a>
-                            <a href="{% url 'task_manager:delete_process' pk=team.id%}" class="btn btn-primary">Удалить</a>
+                            <a href="{% url 'bp_manager:update_process' pk=process.id%}" class="btn btn-primary">Изменить</a>
+                            <a href="{% url 'bp_manager:delete_process' pk=team.id%}" class="btn btn-primary">Удалить</a>
                         </div>
                     </div>
                 {% endfor %}

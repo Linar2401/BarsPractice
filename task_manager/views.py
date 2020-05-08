@@ -12,36 +12,6 @@ from account.models import CustomUser
 from task_manager.models import *
 
 
-class TeamCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Team
-    fields = ['name', 'managers', 'workers', 'board']
-    template_name = 'task_manager/create_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class BoardCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Board
-    fields = ['name', 'room']
-    template_name = 'task_manager/create_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class ProcessCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Process
-    fields = ['name', 'board', 'status']
-    template_name = 'task_manager/create_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
 class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     login_url = reverse_lazy('account:login')
     model = Task
@@ -62,36 +32,6 @@ class TaskCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 
-class TeamUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    login_url = reverse_lazy('account:login')
-    model = Team
-    fields = ['name', 'managers', 'workers', 'board']
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class BoardUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    login_url = reverse_lazy('account:login')
-    model = Board
-    fields = ['name', 'room']
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class ProcessUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    login_url = reverse_lazy('account:login')
-    model = Process
-    fields = ['name', 'board', 'status']
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
 class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     login_url = reverse_lazy('account:login')
     model = Task
@@ -108,99 +48,10 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return super().form_valid(form)
 
 
-class TeamDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    login_url = reverse_lazy('account:login')
-    model = Team
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class BoardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    login_url = reverse_lazy('account:login')
-    model = Board
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class ProcessDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    login_url = reverse_lazy('account:login')
-    model = Process
-    template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        print(self.request.user)
-        return self.request.user.is_manager()
-
-
 class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     login_url = reverse_lazy('account:login')
     model = Task
     template_name = 'task_manager/update_form.html'
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class BoardDetail(LoginRequiredMixin, DetailView):
-    model = Board
-    template_name = 'task_manager/board_detail_manager.html'
-    login_url = reverse_lazy('account:login')
-
-    def get(self, request, *args, **kwargs):
-        if self.request.user.room is None:
-            return redirect(reverse_lazy('account:profile'))
-        elif not self.request.user.is_manager():
-            self.template_name = 'task_manager/board_detail_stuff.html'
-        return super().get(request, *args, **kwargs)
-
-
-class TeamCreateByBoardView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Team
-    fields = ['name', 'managers', 'workers']
-    template_name = 'task_manager/create_form.html'
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.board = get_object_or_404(Room, pk=self.kwargs['id'])
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class BoardCreateByRoomView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Board
-    fields = ['name']
-    template_name = 'task_manager/create_form.html'
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.room = get_object_or_404(Room, pk=self.kwargs['id'])
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
-
-    def test_func(self):
-        return self.request.user.is_manager()
-
-
-class ProcessCreateByBoardView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = reverse_lazy('account:login')
-    model = Process
-    fields = ['name', 'status']
-    template_name = 'task_manager/create_form.html'
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.board = get_object_or_404(Room, pk=self.kwargs['id'])
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
 
     def test_func(self):
         return self.request.user.is_manager()
@@ -245,6 +96,3 @@ class StartTask(LoginRequiredMixin, UserPassesTestMixin, RedirectView):
         else:
             pattern_name = reverse_lazy('task_manager:board_view')
         return super().get_redirect_url(*args, **kwargs)
-
-
-
